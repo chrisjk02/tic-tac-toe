@@ -12,3 +12,10 @@ const Gameboard = (function () {
 
     return { getCellValue, setCellValue }
 })();
+
+function newPlayer(marker) {
+    let playerMarker = marker;
+    const makeMove = (row, col) => { Gameboard.setCellValue(row, col, playerMarker) };
+
+    return { makeMove }
+}
