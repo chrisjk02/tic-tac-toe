@@ -19,3 +19,19 @@ function newPlayer(marker) {
 
     return { makeMove }
 }
+
+const displayController = (function () {
+    const p1 = newPlayer('X');
+    const p2 = newPlayer('O');
+
+    const resetGame = () => {
+        // RESET GAMEBOARD
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                Gameboard.setCellValue(row, col, '');
+            }
+        }
+    }
+
+    return { resetGame }
+})();
