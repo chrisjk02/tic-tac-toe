@@ -1,19 +1,19 @@
 // STORE ARRAY INSIDE GAMEBOARD OBJECT
-function createGameboard() {
-    return {
-        board: [
-            ['', '', ''],
-            ['', '', ''],
-            ['', '', '']
-        ],
+const Gameboard = (function () {
+    const board = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+    ];
 
+    return {
         getCellValue(row, col) {
-            return this.board[row][col];
+            return board[row][col];
         },
 
         setCellValue(row, col, value) {
-            this.board[row][col] = value;
+            board[row][col] = value;
         }
 
     };
-}
+})();
