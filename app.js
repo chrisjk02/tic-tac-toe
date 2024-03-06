@@ -7,11 +7,11 @@ function createGameboard() {
             ['', '', '']
         ],
 
-        getCellValue: function (row, col) {
+        getCellValue(row, col) {
             return this.board[row][col];
         },
 
-        setCellValue: function (row, col, value) {
+        setCellValue(row, col, value) {
             this.board[row][col] = value;
         }
 
