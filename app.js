@@ -1,9 +1,9 @@
 // STORE ARRAY INSIDE GAMEBOARD OBJECT
 const Gameboard = (function () {
     const board = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
+        ['X', 'X', 'X'],
+        ['X', 'X', 'X'],
+        ['X', 'X', 'X']
     ];
 
     const getCellValue = (row, col) => { return board[row][col]; };
@@ -14,7 +14,6 @@ const Gameboard = (function () {
 })();
 
 function newPlayer(marker) {
-    let playerMarker = marker;
     const askRow = () => {
         return parseInt(prompt('Enter row:'));
     }
@@ -23,7 +22,7 @@ function newPlayer(marker) {
         return parseInt(prompt('Enter column:'));
     }
 
-    const makeMove = (row, col) => { Gameboard.setCellValue(row, col, playerMarker) };
+    const makeMove = (row, col) => { Gameboard.setCellValue(row, col, marker) };
 
     return { askRow, askColumn, makeMove }
 }
@@ -96,4 +95,21 @@ function checkWinner(board) {
 
     // No winner
     return null;
+}
+
+function displayBoard(board) {
+    let body = document.querySelector('body');
+    let grid = document.createElement('div');
+    grid.classList.add('item-grid');
+
+    for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+            let gridCell = document.createElement('div');
+            gridCell.classList.add('item-grid__cell');
+            gridCell.innerText = board[row][col];
+            grid.appendChild(gridCell);
+        }
+    }
+
+    body.appendChild(grid);
 }
