@@ -98,9 +98,11 @@ function checkWinner(board) {
 }
 
 function displayBoard(board) {
-    let body = document.querySelector('body');
+    let container = document.querySelector('.container');
+
     let grid = document.createElement('div');
     grid.classList.add('item-grid');
+    grid.classList.add('section-margin');
 
     for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
@@ -111,5 +113,5 @@ function displayBoard(board) {
         }
     }
 
-    body.appendChild(grid);
+    container.appendChild(grid);
 }
