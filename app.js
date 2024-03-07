@@ -36,17 +36,14 @@ const displayController = (function () {
         resetGame();
 
         while (winner === null) {
-            console.table(Gameboard.board);
             console.log("Player 1's Turn");
             p1.makeMove(p1.askRow(), p1.askColumn());
-            console.table(Gameboard.board);
 
             winner = checkWinner(Gameboard.board);
             if (winner !== null) { break; }
 
             console.log("Player 2's Turn");
             p2.makeMove(p2.askRow(), p2.askColumn());
-            console.table(Gameboard.board);
 
             winner = checkWinner(Gameboard.board);
             if (winner !== null) { break; }
@@ -97,7 +94,7 @@ function checkWinner(board) {
     return null;
 }
 
-function displayBoard(board) {
+function displayBoard() {
     let container = document.querySelector('.container');
 
     let grid = document.createElement('div');
@@ -108,7 +105,11 @@ function displayBoard(board) {
         for (let col = 0; col < 3; col++) {
             let gridCell = document.createElement('div');
             gridCell.classList.add('item-grid__cell');
-            gridCell.innerText = board[row][col];
+            gridCell.innerText = Gameboard.board[row][col];
+
+            gridCell.setAttribute('data-row', row);
+            gridCell.setAttribute('data-col', col);
+
             grid.appendChild(gridCell);
         }
     }
