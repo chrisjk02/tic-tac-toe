@@ -16,14 +16,14 @@ let board = ["", "", "", "", "", "", "", "", ""];
 let currentPlayer = "X";
 let running = false;
 
-initializeGame();
 
-function initializeGame() {
+
+(function initializeGame() {
     cells.forEach(cell => cell.addEventListener('click', cellClicked));
     restartBtn.addEventListener('click', restartGame);
     statusText.textContent = `${currentPlayer}'s turn`;
     running = true;
-}
+})();
 
 function cellClicked() {
     const cellIndex = this.getAttribute("cellIndex");
