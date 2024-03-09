@@ -56,8 +56,11 @@ body {
 .board--cell {
     width: 100%;
     height: 100%;
-    background-color: rgb(250, 168, 229);
     border: 2px solid black;
+    cursor: pointer;
+
+    font-size: max(200px, 2rem);
+    font-weight: 100;
 }
 
 .margin-t {

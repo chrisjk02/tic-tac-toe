@@ -1,118 +1,84 @@
-// STORE ARRAY INSIDE GAMEBOARD OBJECT
-const Gameboard = (function () {
-    const board = [
-        ['X', 'X', 'X'],
-        ['X', 'X', 'X'],
-        ['X', 'X', 'X']
-    ];
+const cells = document.querySelectorAll(".board--cell");
+const statusText = document.querySelector("#statusText");
+const restartBtn = document.querySelector("#restartBtn");
+const winConditions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
 
-    const getCellValue = (row, col) => { return board[row][col]; };
+let board = ["", "", "", "", "", "", "", "", ""];
+let currentPlayer = "X";
+let running = false;
 
-    const setCellValue = (row, col, value) => { board[row][col] = value; };
+initializeGame();
 
-    return { board, getCellValue, setCellValue }
-})();
-
-function newPlayer(marker) {
-    const askRow = () => {
-        return parseInt(prompt('Enter row:'));
-    }
-
-    const askColumn = () => {
-        return parseInt(prompt('Enter column:'));
-    }
-
-    const makeMove = (row, col) => { Gameboard.setCellValue(row, col, marker) };
-
-    return { askRow, askColumn, makeMove }
+function initializeGame() {
+    cells.forEach(cell => cell.addEventListener('click', cellClicked));
+    restartBtn.addEventListener('click', restartGame);
+    statusText.textContent = `${currentPlayer}'s turn`;
+    running = true;
 }
 
-const displayController = (function () {
-    const p1 = newPlayer('X');
-    const p2 = newPlayer('O');
-    let winner = null;
+function cellClicked() {
+    const cellIndex = this.getAttribute("cellIndex");
 
-    const playGame = () => {
-        resetGame();
+    if (board[cellIndex] != "" || !running) { return; }
 
-        while (winner === null) {
-            console.log("Player 1's Turn");
-            p1.makeMove(p1.askRow(), p1.askColumn());
-
-            winner = checkWinner(Gameboard.board);
-            if (winner !== null) { break; }
-
-            console.log("Player 2's Turn");
-            p2.makeMove(p2.askRow(), p2.askColumn());
-
-            winner = checkWinner(Gameboard.board);
-            if (winner !== null) { break; }
-        }
-
-        if (winner === 'X') { console.log('Player 1 Wins!'); }
-        else if (winner === 'O') { console.log('Player 2 Wins!'); }
-        else { console.log('Tie!'); }
-    }
-
-    const resetGame = () => {
-        for (let row = 0; row < 3; row++) {
-            for (let col = 0; col < 3; col++) {
-                Gameboard.setCellValue(row, col, '');
-            }
-        }
-
-        winner = null;
-    }
-
-    return { playGame, resetGame }
-})();
-
-function checkWinner(board) {
-    // Check rows
-    for (let i = 0; i < 3; i++) {
-        if (board[i][0] && board[i][0] === board[i][1] && board[i][0] === board[i][2]) {
-            return board[i][0];
-        }
-    }
-
-    // Check columns
-    for (let i = 0; i < 3; i++) {
-        if (board[0][i] && board[0][i] === board[1][i] && board[0][i] === board[2][i]) {
-            return board[0][i];
-        }
-    }
-
-    // Check diagonals
-    if (board[0][0] && board[0][0] === board[1][1] && board[0][0] === board[2][2]) {
-        return board[0][0];
-    }
-    if (board[0][2] && board[0][2] === board[1][1] && board[0][2] === board[2][0]) {
-        return board[0][2];
-    }
-
-    // No winner
-    return null;
+    updateCell(this, cellIndex);
+    checkWinner();
 }
 
-function displayBoard() {
-    let container = document.querySelector('.container');
+function updateCell(cell, index) {
+    board[index] = currentPlayer;
+    cell.textContent = currentPlayer;
+}
 
-    let grid = document.createElement('div');
-    grid.classList.add('item-grid');
-    grid.classList.add('section-margin');
+function changePlayer() {
+    currentPlayer = (currentPlayer == "X") ? "O" : "X";
+    statusText.textContent = `${currentPlayer}'s turn`;
+}
 
-    for (let row = 0; row < 3; row++) {
-        for (let col = 0; col < 3; col++) {
-            let gridCell = document.createElement('div');
-            gridCell.classList.add('item-grid__cell');
-            gridCell.innerText = Gameboard.board[row][col];
+function checkWinner() {
+    let roundWon = false;
 
-            gridCell.setAttribute('data-row', row);
-            gridCell.setAttribute('data-col', col);
+    for (let i = 0; i < winConditions.length; i++) {
+        const condition = winConditions[i];
+        const cellA = board[condition[0]];
+        const cellB = board[condition[1]];
+        const cellC = board[condition[2]];
 
-            grid.appendChild(gridCell);
+        if (cellA == "" || cellB == "" || cellC == "") {
+            continue;
+        }
+        if (cellA == cellB && cellB == cellC) {
+            roundWon = true;
+            break;
         }
     }
 
-    container.appendChild(grid);
+    if (roundWon) {
+        statusText.textContent = `${currentPlayer} wins!`
+        running = false;
+    }
+    else if (!board.includes("")) {
+        statusText.textContent = `Draw!`
+        running = false;
+    }
+    else {
+        changePlayer();
+    }
+}
+
+function restartGame() {
+    currentPlayer = "X";
+    board = ["", "", "", "", "", "", "", "", ""];
+    statusText.textContent = `${currentPlayer}'s turn`;
+    cells.forEach(cell => cell.textContent = "");
+    running = true;
 }
